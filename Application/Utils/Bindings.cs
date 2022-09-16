@@ -1,4 +1,6 @@
-﻿using Ninject.Modules;
+﻿using System;
+using System.Configuration;
+using Ninject.Modules;
 using DataAccess.Interfaces;
 using BusinessLogic.Interfaces;
 using Presentation.Interfaces;
@@ -9,11 +11,8 @@ using Application.Implementations.UserInterfaces;
 
 namespace Application.Utils
 {
-    internal class ProjectBilder : NinjectModule
+    internal class BindingsBuilder : NinjectModule
     {
-
-
-
         public override void Load()
         {
             Bind<IUserInterface>().To<ConsoleUserInterface>();

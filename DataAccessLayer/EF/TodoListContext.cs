@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using DataAccess.Models;
 using System.Data.Entity;
-using DataAccess.Models;
 
-namespace DataAccess
+namespace DataAccess.EF
 {
-    internal class TodoListContext : DbContext
+    public class TodoListContext : DbContext
     {
         public DbSet<TaskDataObject> Tasks { get; set; }
 

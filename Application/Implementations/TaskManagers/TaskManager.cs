@@ -66,7 +66,11 @@ namespace Application.Implementations.TaskManagers
         {
             if (_todoList == null) UpdateCachedData();
 
-            return TryMap<List<IReadOnlyTaskDataObject>, List<TaskOTD>>(_todoList, _DA2BLMapper);
+            List<TaskOTD> tasks = TryMap<List<IReadOnlyTaskDataObject>, List<TaskOTD>>(_todoList, _DA2BLMapper);
+
+            if (tasks == null) tasks = new List<TaskOTD>();
+
+            return tasks;
         }
 
         public List<TaskOTD> SearchTasksByName(string name) => GetAllTasks().FindAll(task => task.Name.Contains(name));

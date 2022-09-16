@@ -18,7 +18,7 @@ namespace Application.Utils
 
         private void InitializeApplicationInstance()
         {
-            NinjectModule bindings = new ProjectBilder();
+            NinjectModule bindings = new BindingsBuilder();
             StandardKernel kernel = new StandardKernel();
             kernel.Load(bindings);
             IService application = kernel.Get<IService>();
