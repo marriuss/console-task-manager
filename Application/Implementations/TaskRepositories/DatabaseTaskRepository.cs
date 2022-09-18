@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using DataAccess.Interfaces;
 using DataAccess.Models;
 using DataAccess.EF;
@@ -14,8 +15,15 @@ namespace Application.Implementations.TaskRepositories
         private readonly TodoListContext _todoListContext;
         private readonly IMapper _BL2DAmapper;
 
-        public DatabaseTaskRepository(string connectionString)
+        public DatabaseTaskRepository()
         {
+            string connectionString;
+            ConnectionStringSettings connectionStringSettings = ConfigurationManager.ConnectionStrings["default"];
+            
+            connectionString = connectionStringSettings != null 
+                ? connectionStringSettings.ToString() 
+                : @"Server=.\SQLExpress;AttachDbFilename=ToDoListDB.mdf;Database=tasks;Trusted_Connection=Yes;";
+            // TODO: connection string validation + builder
             _todoListContext = new TodoListContext(connectionString);
             _BL2DAmapper = new MapperConfiguration(cfg => cfg.CreateMap<TaskModel, TaskDataObject>()).CreateMapper();
         }

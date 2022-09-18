@@ -6,9 +6,9 @@ namespace Application
     {
         static void Main(string[] args)
         {
-            ApplicationInitializer applicationInitializer = new ApplicationInitializer();
-            var application = applicationInitializer.GetApplicationInstance();
-            application.Start();
+            ApplicationBuilder applicationBuilder = new ApplicationBuilder();
+            var service = applicationBuilder.GetServiceInstance();
+            service.Start();
         }
     }
 }

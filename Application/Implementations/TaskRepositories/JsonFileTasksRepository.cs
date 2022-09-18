@@ -2,6 +2,7 @@
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
+using System.Configuration;
 using DataAccess.Exceptions;
 using DataAccess.Interfaces;
 using DataAccess.Models;
@@ -12,21 +13,25 @@ namespace Application.Implementations.TaskRepositories
 {
     public class JsonFileTasksRepository : ITasksRepository
     {
+        private const string FileName = "results.json";
         private readonly string _filePath;
         private readonly IMapper _BL2DAmapper;
         private List<TaskDataObject> _taskDOs;
         private int _lastId;
 
-        public JsonFileTasksRepository(string filePath)
+        public JsonFileTasksRepository()
         {
+            string filePath = ConfigurationManager.AppSettings.Get("filePath");
+            filePath = CheckIsValidPath(filePath) ? Directory.GetCurrentDirectory() : filePath;
+            _filePath = Path.Combine(filePath, FileName);
             _taskDOs = new List<TaskDataObject>();
             _BL2DAmapper = new MapperConfiguration(cfg => cfg.CreateMap<TaskModel, TaskDataObject>()).CreateMapper();
-            _filePath = filePath;
         }
 
         public void Create(TaskModel task)
         {
-            if (task == null) throw new ArgumentNullException(nameof(task));
+            if (task == null) 
+                throw new ArgumentNullException(nameof(task));
 
             int id = GetLastId();
             TaskDataObject taskDataObject = _BL2DAmapper.Map<TaskDataObject>(task);
@@ -83,7 +88,9 @@ namespace Application.Implementations.TaskRepositories
                 try
                 {
                     string fileText = File.ReadAllText(_filePath);
-                    if (!string.IsNullOrEmpty(fileText)) _taskDOs = JsonConvert.DeserializeObject<List<TaskDataObject>>(fileText);
+
+                    if (!string.IsNullOrEmpty(fileText))
+                        _taskDOs = JsonConvert.DeserializeObject<List<TaskDataObject>>(fileText);
                 }
                 catch (Exception)
                 {
@@ -108,6 +115,14 @@ namespace Application.Implementations.TaskRepositories
             while (doesIdExist);
 
             return id;
+        }
+
+        private bool CheckIsValidPath(string path)
+        {
+            bool isValid;
+            isValid = string.IsNullOrEmpty(path);
+            // TODO: validation method
+            return isValid;
         }
     }
 }
