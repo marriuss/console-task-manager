@@ -4,11 +4,11 @@
     {
         int Id { get; }
         string Name { get; }
-        int Priority { get; } 
+        int Priority { get; }
         string Text { get; }
         bool IsCompleted { get; }
     }
-        
+
     public class TaskDataObject : IReadOnlyTaskDataObject
     {
         public int Id { get; set; }

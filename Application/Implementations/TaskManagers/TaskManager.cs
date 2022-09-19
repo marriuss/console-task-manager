@@ -21,13 +21,13 @@ namespace Application.Implementations.TaskManagers
         public TaskManager(ITasksRepository tasksRepository)
         {
             _tasksRepository = tasksRepository;
-            _BL2DAMapper = new MapperConfiguration(cfg => cfg.CreateMap<TaskOTD, TaskModel>()).CreateMapper();
-            _DA2BLMapper = new MapperConfiguration(cfg => cfg.CreateMap<TaskDataObject, TaskOTD>()).CreateMapper();
+            _BL2DAMapper = new MapperConfiguration(cfg => cfg.CreateMap<TaskDataTransferObject, TaskModel>()).CreateMapper();
+            _DA2BLMapper = new MapperConfiguration(cfg => cfg.CreateMap<TaskDataObject, TaskDataTransferObject>()).CreateMapper();
         }
 
-        public void AddTask(TaskOTD taskOTD)
+        public void AddTask(TaskDataTransferObject taskDTO)
         {
-            TaskModel task = TryMap<TaskOTD, TaskModel>(taskOTD, _BL2DAMapper);
+            TaskModel task = TryMap<TaskDataTransferObject, TaskModel>(taskDTO, _BL2DAMapper);
 
             if (task != null)
             {
@@ -36,44 +36,46 @@ namespace Application.Implementations.TaskManagers
             }
         }
 
-        public void RemoveTask(TaskOTD taskOTD)
+        public void RemoveTask(TaskDataTransferObject taskDTO)
         {
-            IReadOnlyTaskDataObject taskDO = GetTaskDOById(taskOTD.Id);
+            IReadOnlyTaskDataObject taskDO = GetTaskDOById(taskDTO.Id);
             HandleException(() => _tasksRepository.Delete(taskDO));
             UpdateCachedData();
         }
 
-        public void CompleteTask(TaskOTD taskOTD)
+        public void CompleteTask(TaskDataTransferObject taskDTO)
         {
-            TaskModel taskModel = TryMap<TaskOTD, TaskModel>(taskOTD, _BL2DAMapper);
+            TaskModel taskModel = TryMap<TaskDataTransferObject, TaskModel>(taskDTO, _BL2DAMapper);
 
             if (taskModel != null)
             {
                 taskModel.IsCompleted = true;
-                IReadOnlyTaskDataObject taskDO = GetTaskDOById(taskOTD.Id);
+                IReadOnlyTaskDataObject taskDO = GetTaskDOById(taskDTO.Id);
                 HandleException(() => _tasksRepository.Update(taskDO, taskModel));
                 UpdateCachedData();
             }
         }
 
-        public TaskOTD GetTaskById(int id)
+        public TaskDataTransferObject GetTaskById(int id)
         {
             IReadOnlyTaskDataObject taskDO = GetTaskDOById(id);
-            return TryMap<IReadOnlyTaskDataObject, TaskOTD>(taskDO, _DA2BLMapper);
+            return TryMap<IReadOnlyTaskDataObject, TaskDataTransferObject>(taskDO, _DA2BLMapper);
         }
 
-        public List<TaskOTD> GetAllTasks()
+        public List<TaskDataTransferObject> GetAllTasks()
         {
-            if (_todoList == null) UpdateCachedData();
+            if (_todoList == null)
+                UpdateCachedData();
 
-            List<TaskOTD> tasks = TryMap<List<IReadOnlyTaskDataObject>, List<TaskOTD>>(_todoList, _DA2BLMapper);
+            List<TaskDataTransferObject> tasks = TryMap<List<IReadOnlyTaskDataObject>, List<TaskDataTransferObject>>(_todoList, _DA2BLMapper);
 
-            if (tasks == null) tasks = new List<TaskOTD>();
+            if (tasks == null)
+                tasks = new List<TaskDataTransferObject>();
 
             return tasks;
         }
 
-        public List<TaskOTD> SearchTasksByName(string name) => GetAllTasks().FindAll(task => task.Name.Contains(name));
+        public List<TaskDataTransferObject> SearchTasksByName(string name) => GetAllTasks().FindAll(task => task.Name.Contains(name));
 
         public void SortTasksByPriority() => _todoList = _todoList.OrderByDescending(taskDO => taskDO.Priority).ToList();
 

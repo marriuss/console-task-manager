@@ -43,7 +43,7 @@
   <ItemGroup>
     <Compile Include="Exceptions\ValidationException.cs" />
     <Compile Include="Interfaces\ITaskManager.cs" />
-    <Compile Include="Models\TaskOTD.cs" />
+    <Compile Include="Models\TaskDataTransferObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

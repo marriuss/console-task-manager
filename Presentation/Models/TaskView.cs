@@ -4,16 +4,16 @@ namespace Presentation.Models
 {
     public class TaskView
     {
-        private readonly TaskOTD _taskOTD;
+        private readonly TaskDataTransferObject _taskDTO;
 
-        public TaskView(TaskOTD taskOTD)
+        public TaskView(TaskDataTransferObject taskDTO)
         {
-             _taskOTD = taskOTD;
+             _taskDTO = taskDTO;
         }
 
         public override string ToString()
         {
-            return $"[ID: {_taskOTD.Id}] {_taskOTD.Name}{(_taskOTD.IsCompleted ? " (COMPLETED) " : "")}\nPriority: {(Priority)_taskOTD.Priority}\nDescription: {_taskOTD.Text}";
+            return $"[ID: {_taskDTO.Id}] {_taskDTO.Name}{(_taskDTO.IsCompleted ? " (COMPLETED) " : "")}\nPriority: {(Priority)_taskDTO.Priority}\nDescription: {_taskDTO.Text}";
         }
     }
 }

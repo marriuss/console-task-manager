@@ -22,12 +22,12 @@ namespace BusinessLogic.Interfaces
     public interface ITaskManager
     {
         event EventHandler<ErrorEventArgs> ErrorOccured;
-        void AddTask(TaskOTD taskOTD);
-        void RemoveTask(TaskOTD taskOTD);
-        void CompleteTask(TaskOTD taskOTD);
-        TaskOTD GetTaskById(int id);
-        List<TaskOTD> SearchTasksByName(string name);
+        void AddTask(TaskDataTransferObject taskDTO);
+        void RemoveTask(TaskDataTransferObject taskDTO);
+        void CompleteTask(TaskDataTransferObject taskDTO);
+        TaskDataTransferObject GetTaskById(int id);
+        List<TaskDataTransferObject> SearchTasksByName(string name);
         void SortTasksByPriority();
-        List<TaskOTD> GetAllTasks();
+        List<TaskDataTransferObject> GetAllTasks();
     }
 }

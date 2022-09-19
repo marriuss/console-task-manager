@@ -20,7 +20,7 @@ namespace Application.Implementations.Services
         {
             _userInterface = userInterface;
             _taskManager = taskManager;
-            _Presentation2BLMapper = new MapperConfiguration(cfg => cfg.CreateMap<UserTask, TaskOTD>()).CreateMapper();
+            _Presentation2BLMapper = new MapperConfiguration(cfg => cfg.CreateMap<UserTask, TaskDataTransferObject>()).CreateMapper();
         }
 
         public void Start()
@@ -46,16 +46,16 @@ namespace Application.Implementations.Services
         private void SelectTask()
         {
             int id = _userInterface.AskIntInput("Task ID: ");
-            TaskOTD taskOTD = null;
-            InteractTaskManager(() => taskOTD = _taskManager.GetTaskById(id));
+            TaskDataTransferObject taskDTO = null;
+            InteractTaskManager(() => taskDTO = _taskManager.GetTaskById(id));
 
-            if (taskOTD != null)
+            if (taskDTO != null)
             {
                 _userInterface.ChooseAction(
                     new Dictionary<string, Action>()
                     {
-                       { "Remove", () => RemoveTask(taskOTD) },
-                       { "Complete", () => MarkTaskAsCompleted(taskOTD) },
+                       { "Remove", () => RemoveTask(taskDTO) },
+                       { "Complete", () => MarkTaskAsCompleted(taskDTO) },
                     }
                 );
             }
@@ -65,25 +65,25 @@ namespace Application.Implementations.Services
         private void AddNewTask()
         {
             UserTask userTask = AskUserTaskInput();
-            TaskOTD taskOTD = _Presentation2BLMapper.Map<TaskOTD>(userTask);
-            InteractTaskManager(() => _taskManager.AddTask(taskOTD));
+            TaskDataTransferObject taskDTO = _Presentation2BLMapper.Map<TaskDataTransferObject>(userTask);
+            InteractTaskManager(() => _taskManager.AddTask(taskDTO));
         }
 
-        private void RemoveTask(TaskOTD taskOTD) => InteractTaskManager(() => _taskManager.RemoveTask(taskOTD));
+        private void RemoveTask(TaskDataTransferObject taskDTO) => InteractTaskManager(() => _taskManager.RemoveTask(taskDTO));
 
-        private void MarkTaskAsCompleted(TaskOTD taskView) => InteractTaskManager(() => _taskManager.CompleteTask(taskView));
+        private void MarkTaskAsCompleted(TaskDataTransferObject taskView) => InteractTaskManager(() => _taskManager.CompleteTask(taskView));
 
         private void SearchByName()
         {
             string name = AskTaskName();
-            List<TaskOTD> tasksOTDs = new List<TaskOTD>();
+            List<TaskDataTransferObject> tasksOTDs = new List<TaskDataTransferObject>();
             InteractTaskManager(() => tasksOTDs = _taskManager.SearchTasksByName(name));
             ShowTaskList(tasksOTDs);
         }
 
         private void ShowAllTasks()
         {
-            List<TaskOTD> tasks = new List<TaskOTD>();
+            List<TaskDataTransferObject> tasks = new List<TaskDataTransferObject>();
             InteractTaskManager(() => tasks = _taskManager.GetAllTasks());
             ShowTaskList(tasks);
         }
@@ -101,7 +101,7 @@ namespace Application.Implementations.Services
             _taskManager.ErrorOccured -= OnErrorOccured;
         }
 
-        private void ShowTaskList(List<TaskOTD> tasks)
+        private void ShowTaskList(List<TaskDataTransferObject> tasks)
         {
             string message = "No results found.";
 
@@ -109,7 +109,7 @@ namespace Application.Implementations.Services
             {
                 StringBuilder stringBuilder = new StringBuilder("Results:\n");
 
-                foreach (TaskOTD task in tasks)
+                foreach (TaskDataTransferObject task in tasks)
                     stringBuilder.AppendLine("\n" + new TaskView(task).ToString());
 
                 message = stringBuilder.ToString();

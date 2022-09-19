@@ -30,7 +30,8 @@ namespace Application.Implementations.TaskRepositories
 
         public void Create(TaskModel task)
         {
-            if (task == null) throw new ArgumentNullException(nameof(task));
+            if (task == null)
+                throw new ArgumentNullException(nameof(task));
 
             TaskDataObject taskDataObject = _BL2DAmapper.Map<TaskDataObject>(task);
             _todoListContext.Tasks.Add(taskDataObject);
@@ -38,7 +39,8 @@ namespace Application.Implementations.TaskRepositories
 
         public void Delete(IReadOnlyTaskDataObject taskDO)
         {
-            if (taskDO == null) throw new ArgumentNullException(nameof(taskDO));
+            if (taskDO == null)
+                throw new ArgumentNullException(nameof(taskDO));
 
             TaskDataObject task = _todoListContext.Tasks.Find(taskDO.Id);
 
@@ -51,7 +53,8 @@ namespace Application.Implementations.TaskRepositories
 
         public void Update(IReadOnlyTaskDataObject taskDO, TaskModel taskModel)
         {
-            if (taskDO == null) new ArgumentNullException(nameof(taskDO));
+            if (taskDO == null)
+                new ArgumentNullException(nameof(taskDO));
 
             TaskDataObject task = _todoListContext.Tasks.Find(taskDO.Id);
 
