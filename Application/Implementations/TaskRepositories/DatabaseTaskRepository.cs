@@ -19,9 +19,9 @@ namespace Application.Implementations.TaskRepositories
         {
             string connectionString;
             ConnectionStringSettings connectionStringSettings = ConfigurationManager.ConnectionStrings["default"];
-            
-            connectionString = connectionStringSettings != null 
-                ? connectionStringSettings.ToString() 
+
+            connectionString = connectionStringSettings != null
+                ? connectionStringSettings.ToString()
                 : @"Server=.\SQLExpress;AttachDbFilename=ToDoListDB.mdf;Database=tasks;Trusted_Connection=Yes;";
             // TODO: connection string validation + builder
             _todoListContext = new TodoListContext(connectionString);

@@ -18,7 +18,7 @@ namespace Application.Utils
 
         public IService GetServiceInstance()
         {
-            if (_service == null) 
+            if (_service == null)
                 InitializeServiceInstance();
 
             return _service;

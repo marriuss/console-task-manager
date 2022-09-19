@@ -30,7 +30,7 @@ namespace Application.Implementations.TaskRepositories
 
         public void Create(TaskModel task)
         {
-            if (task == null) 
+            if (task == null)
                 throw new ArgumentNullException(nameof(task));
 
             int id = GetLastId();

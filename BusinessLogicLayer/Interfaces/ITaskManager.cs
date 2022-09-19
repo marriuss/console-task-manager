@@ -8,9 +8,9 @@ namespace BusinessLogic.Interfaces
     {
         public string ErrorMessage { get; private set; }
 
-        public ErrorEventArgs(string message) 
+        public ErrorEventArgs(string message)
         {
-            ErrorMessage = message; 
+            ErrorMessage = message;
         }
 
         public ErrorEventArgs(Exception ex)
