@@ -44,8 +44,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Exceptions\DataLoadException.cs" />
-    <Compile Include="Exceptions\TaskDoesNotExistException.cs" />
     <Compile Include="Interfaces\ITasksRepository.cs" />
     <Compile Include="Models\TaskDataObject.cs" />
     <Compile Include="Models\TaskModel.cs" />

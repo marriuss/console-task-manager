@@ -138,9 +138,9 @@ namespace Application.Implementations.TaskRepositories
                     }
                 }
             }
-            catch(SqlException ex)
+            catch(SqlException sqlException)
             {
-                _logger.LogError(ex, "SQL Server error.");
+                _logger.LogError($"SQL Server error: {sqlException.Message}.");
             }
 
             return results;
