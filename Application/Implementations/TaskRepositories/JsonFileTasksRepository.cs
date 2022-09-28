@@ -19,11 +19,12 @@ namespace Application.Implementations.TaskRepositories
         private List<TaskDataObject> _taskDOs;
         private int _lastId;
 
+        private string DefaultPath => Directory.GetCurrentDirectory();
+
         public JsonFileTasksRepository()
         {
             string filePath = ConfigurationManager.AppSettings.Get("filePath");
-            filePath = CheckIsValidPath(filePath) ? Directory.GetCurrentDirectory() : filePath;
-            _filePath = Path.Combine(filePath, FileName);
+            _filePath = GetFilePath(filePath);
             _taskDOs = new List<TaskDataObject>();
             _BL2DAmapper = new MapperConfiguration(cfg => cfg.CreateMap<TaskModel, TaskDataObject>()).CreateMapper();
         }
@@ -117,12 +118,25 @@ namespace Application.Implementations.TaskRepositories
             return id;
         }
 
-        private bool CheckIsValidPath(string path)
+        private string GetFilePath(string filePath)
         {
             bool isValid;
-            isValid = string.IsNullOrEmpty(path);
-            // TODO: validation method
-            return isValid;
+
+            try
+            {
+                filePath = Path.GetFullPath(filePath);
+                isValid = !string.IsNullOrEmpty(filePath);
+                isValid &= Directory.Exists(filePath);
+            }
+            catch (ArgumentException)
+            {
+                isValid = false;
+            }
+
+            if (!isValid)
+                filePath = DefaultPath;
+
+            return Path.Combine(filePath, FileName);
         }
     }
 }

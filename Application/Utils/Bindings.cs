@@ -10,11 +10,20 @@ using Application.Implementations.Services;
 using Application.Implementations.TaskManagers;
 using Application.Implementations.TaskRepositories;
 using Application.Implementations.UserInterfaces;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Console;
 
 namespace Application.Utils
 {
     internal class BindingsBuilder : NinjectModule
     {
+        private ILoggerFactory _loggerFactory;
+
+        public BindingsBuilder() : base()
+        {
+            _loggerFactory = LoggerFactory.Create(builder => builder.AddConsole().SetMinimumLevel(LogLevel.Debug));
+        }
+
         public override void Load()
         {
             BindInterfaceImplementation<IUserInterface>();
@@ -26,7 +35,8 @@ namespace Application.Utils
         private void BindInterfaceImplementation<T>()
         {
             Type implementation = ImplementationsInfo.GetImplementation<T>();
-            Bind<T>().To(implementation);
+            ILogger logger = _loggerFactory.CreateLogger(implementation);
+            Bind<T>().To(implementation).WithConstructorArgument(logger);
         }
     }
 
